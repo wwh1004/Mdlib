@@ -46,12 +46,12 @@ namespace Mdlib.DotNet.Metadata {
 			set => RawValue->iStreams = value;
 		}
 
-		internal StorageHeader(IMetadataManagement metadataManagement) {
-			if (metadataManagement == null)
-				throw new ArgumentNullException(nameof(metadataManagement));
+		internal StorageHeader(IMetadata metadata) {
+			if (metadata == null)
+				throw new ArgumentNullException(nameof(metadata));
 
-			_peImage = metadataManagement.PEImage;
-			_offset = (uint)metadataManagement.StorageSignature.FOA + metadataManagement.StorageSignature.Length;
+			_peImage = metadata.PEImage;
+			_offset = (uint)metadata.StorageSignature.FOA + metadata.StorageSignature.Length;
 			_rawData = (byte*)_peImage.RawData + _offset;
 		}
 	}

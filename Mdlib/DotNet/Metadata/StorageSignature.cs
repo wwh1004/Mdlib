@@ -74,12 +74,12 @@ namespace Mdlib.DotNet.Metadata {
 			}
 		}
 
-		internal StorageSignature(IMetadataManagement metadataManagement) {
-			if (metadataManagement == null)
-				throw new ArgumentNullException(nameof(metadataManagement));
+		internal StorageSignature(IMetadata metadata) {
+			if (metadata == null)
+				throw new ArgumentNullException(nameof(metadata));
 
-			_peImage = metadataManagement.PEImage;
-			_offset = (uint)metadataManagement.PEImage.ToFOA((RVA)metadataManagement.Cor20Header.MetadataDirectory->Address);
+			_peImage = metadata.PEImage;
+			_offset = (uint)metadata.PEImage.ToFOA((RVA)metadata.Cor20Header.MetadataDirectory->Address);
 			_rawData = (byte*)_peImage.RawData + _offset;
 		}
 

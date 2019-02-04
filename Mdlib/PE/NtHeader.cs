@@ -12,16 +12,15 @@ namespace Mdlib.PE {
 		private readonly uint _offset;
 		private readonly FileHeader _fileHeader;
 		private readonly OptionalHeader _optionalHeader;
-		private readonly bool _is64Bit;
 
 		/// <summary />
 		public IntPtr RawData => (IntPtr)_rawData;
 
 		/// <summary />
-		public IMAGE_NT_HEADERS32* RawValue32 => _is64Bit ? throw new InvalidOperationException("It's PE32 format.") : (IMAGE_NT_HEADERS32*)_rawData;
+		public IMAGE_NT_HEADERS32* RawValue32 => Is64Bit ? throw new InvalidOperationException("It's PE32 format.") : (IMAGE_NT_HEADERS32*)_rawData;
 
 		/// <summary />
-		public IMAGE_NT_HEADERS64* RawValue64 => _is64Bit ? (IMAGE_NT_HEADERS64*)_rawData : throw new InvalidOperationException("It's PE32+ format.");
+		public IMAGE_NT_HEADERS64* RawValue64 => Is64Bit ? (IMAGE_NT_HEADERS64*)_rawData : throw new InvalidOperationException("It's PE32+ format.");
 
 		/// <summary />
 		public RVA RVA => (RVA)_offset;
@@ -30,7 +29,7 @@ namespace Mdlib.PE {
 		public FOA FOA => (FOA)_offset;
 
 		/// <summary />
-		public uint Length => _is64Bit ? IMAGE_NT_HEADERS64.UnmanagedSize : IMAGE_NT_HEADERS32.UnmanagedSize;
+		public uint Length => 4 + IMAGE_FILE_HEADER.UnmanagedSize + _fileHeader.OptionalHeaderSize;
 
 		/// <summary />
 		public uint Signature {
@@ -44,15 +43,17 @@ namespace Mdlib.PE {
 		/// <summary />
 		public OptionalHeader OptionalHeader => _optionalHeader;
 
-		internal NtHeader(IPEImage peImage, out bool is64Bit) {
+		/// <summary />
+		public bool Is64Bit => _optionalHeader.Is64Bit;
+
+		internal NtHeader(IPEImage peImage) {
 			if (peImage == null)
 				throw new ArgumentNullException(nameof(peImage));
 
 			_offset = peImage.DosHeader.NtHeaderOffset;
 			_rawData = (byte*)peImage.RawData + _offset;
 			_fileHeader = new FileHeader(this);
-			_optionalHeader = new OptionalHeader(this, out is64Bit);
-			_is64Bit = is64Bit;
+			_optionalHeader = new OptionalHeader(this);
 		}
 	}
 }

@@ -31,6 +31,9 @@ namespace Mdlib.PE {
 		public uint Length => _is64Bit ? IMAGE_OPTIONAL_HEADER64.UnmanagedSize : IMAGE_OPTIONAL_HEADER32.UnmanagedSize;
 
 		/// <summary />
+		public bool Is64Bit => _is64Bit;
+
+		/// <summary />
 		public OptionalHeaderType Type {
 			get => *(OptionalHeaderType*)_rawData;
 			set => *(OptionalHeaderType*)_rawData = value;
@@ -223,7 +226,7 @@ namespace Mdlib.PE {
 		/// </summary>
 		public DataDirectory* DotNetDirectory => DataDirectories + 14;
 
-		internal OptionalHeader(NtHeader ntHeader, out bool is64Bit) {
+		internal OptionalHeader(NtHeader ntHeader) {
 			if (ntHeader == null)
 				throw new ArgumentNullException(nameof(ntHeader));
 
@@ -231,10 +234,10 @@ namespace Mdlib.PE {
 			_offset = (uint)ntHeader.FOA + 4 + IMAGE_FILE_HEADER.UnmanagedSize;
 			switch (*(OptionalHeaderType*)_rawData) {
 			case OptionalHeaderType.PE32:
-				is64Bit = false;
+				_is64Bit = false;
 				break;
 			case OptionalHeaderType.PE64:
-				is64Bit = true;
+				_is64Bit = true;
 				break;
 			default:
 				throw new BadImageFormatException("Invalid IMAGE_OPTIONAL_HEADER.Magic");

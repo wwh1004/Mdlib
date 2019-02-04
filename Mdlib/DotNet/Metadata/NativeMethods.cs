@@ -9,7 +9,7 @@ namespace Mdlib.DotNet.Metadata {
 
 		[StructLayout(LayoutKind.Sequential, Pack = 1)]
 		public struct IMAGE_COR20_HEADER {
-			public static uint UnmanagedSize = (uint)sizeof(IMAGE_COR20_HEADER);
+			public static readonly uint UnmanagedSize = (uint)sizeof(IMAGE_COR20_HEADER);
 
 			public uint cb;
 			public ushort MajorRuntimeVersion;
@@ -30,7 +30,7 @@ namespace Mdlib.DotNet.Metadata {
 			/// <summary>
 			/// 大小不包括pVersion的长度
 			/// </summary>
-			public static uint UnmanagedSize = (uint)sizeof(STORAGESIGNATURE) - 1;
+			public static readonly uint UnmanagedSize = (uint)sizeof(STORAGESIGNATURE) - 1;
 
 			public uint lSignature;
 			public ushort iMajorVer;
@@ -45,7 +45,7 @@ namespace Mdlib.DotNet.Metadata {
 
 		[StructLayout(LayoutKind.Sequential, Pack = 1)]
 		public struct STORAGEHEADER {
-			public static uint UnmanagedSize = (uint)sizeof(STORAGEHEADER);
+			public static readonly uint UnmanagedSize = (uint)sizeof(STORAGEHEADER);
 
 			public byte fFlags;
 			public byte pad;
@@ -57,7 +57,7 @@ namespace Mdlib.DotNet.Metadata {
 			/// <summary>
 			/// 大小不包括rcName的长度
 			/// </summary>
-			public static uint UnmanagedSize = (uint)sizeof(STORAGESTREAM) - 4;
+			public static readonly uint UnmanagedSize = (uint)sizeof(STORAGESTREAM) - 4;
 
 			public uint iOffset;
 			public uint iSize;

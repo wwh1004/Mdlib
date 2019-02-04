@@ -28,7 +28,7 @@ namespace Mdlib.DotNet.Metadata {
 		public FOA FOA => (FOA)_offset;
 
 		/// <summary>
-		/// 这里获取的长度是整张表的大小！！！若要获取行数请使用 <see cref="RowCount"/>
+		/// <see cref="Length"/> 返回整张表的大小，若要获取行数请使用 <see cref="RowCount"/>
 		/// </summary>
 		public uint Length => _length;
 

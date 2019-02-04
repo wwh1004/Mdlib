@@ -45,16 +45,11 @@
     <AssemblyOriginatorKeyFile>Mdlib.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DotNet\AssemblyAttributes.cs" />
-    <Compile Include="DotNet\AssemblyDef.cs" />
-    <Compile Include="DotNet\AssemblyHashAlgorithm.cs" />
-    <Compile Include="DotNet\AssemblyRef.cs" />
-    <Compile Include="DotNet\Interfaces.cs" />
     <Compile Include="DotNet\Metadata\ComImageFlags.cs" />
     <Compile Include="DotNet\Metadata\Cor20Header.cs" />
     <Compile Include="DotNet\Metadata\HeapFlags.cs" />
-    <Compile Include="DotNet\Metadata\MetadataHeaps.cs" />
-    <Compile Include="DotNet\Metadata\MetadataManagement.cs" />
+    <Compile Include="DotNet\Metadata\HeapStream.cs" />
+    <Compile Include="DotNet\Metadata\Metadata.cs" />
     <Compile Include="DotNet\Metadata\MetadataStream.cs" />
     <Compile Include="DotNet\Metadata\MetadataTable.cs" />
     <Compile Include="DotNet\Metadata\MetadataToken.cs" />

@@ -68,15 +68,15 @@ namespace Mdlib.DotNet.Metadata {
 			}
 		}
 
-		internal StreamHeader(IMetadataManagement metadataManagement, uint index) {
-			if (metadataManagement == null)
-				throw new ArgumentNullException(nameof(metadataManagement));
+		internal StreamHeader(IMetadata metadata, uint index) {
+			if (metadata == null)
+				throw new ArgumentNullException(nameof(metadata));
 
-			_peImage = metadataManagement.PEImage;
+			_peImage = metadata.PEImage;
 			if (index == 0)
-				_offset = (uint)metadataManagement.StorageHeader.FOA + metadataManagement.StorageHeader.Length;
+				_offset = (uint)metadata.StorageHeader.FOA + metadata.StorageHeader.Length;
 			else
-				_offset = (uint)metadataManagement.StreamHeaders[index - 1].FOA + metadataManagement.StreamHeaders[index - 1].Length;
+				_offset = (uint)metadata.StreamHeaders[index - 1].FOA + metadata.StreamHeaders[index - 1].Length;
 			_rawData = (byte*)_peImage.RawData + _offset;
 		}
 

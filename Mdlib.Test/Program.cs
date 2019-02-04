@@ -26,7 +26,7 @@ namespace Mdlib.Test {
 			const bool DEBUG = true;
 			const bool DEBUG_DETAIL = true;
 
-			using (IPEImage peImage = PEImageFactory.Create(@"..\..\TestFile\ExtremeDumper64.exe")) {
+			using (IPEImage peImage = PEImageFactory.Create("ExtremeDumper64.exe")) {
 				DosHeader dosHeader = peImage.DosHeader;
 				NtHeader ntHeader = peImage.NtHeader;
 				FileHeader fileHeader = peImage.FileHeader;
@@ -39,16 +39,16 @@ namespace Mdlib.Test {
 					Console.WriteLine();
 					Console.WriteLine($"IsDotNetImage: {peImage.IsDotNetImage.ToString()}");
 				}
-				IMetadataManagement metadataManagement = peImage.MetadataManagement;
-				Cor20Header cor20Header = metadataManagement.Cor20Header;
-				StorageSignature storageSignature = metadataManagement.StorageSignature;
+				IMetadata metadata = peImage.Metadata;
+				Cor20Header cor20Header = metadata.Cor20Header;
+				StorageSignature storageSignature = metadata.StorageSignature;
 				if (DEBUG) {
 					Console.WriteLine();
 					Console.WriteLine($"CLR Version: {storageSignature.DisplayVersionString}");
 				}
-				StorageHeader storageHeader = metadataManagement.StorageHeader;
-				StreamHeader[] storageStreamHeaders = metadataManagement.StreamHeaders;
-				TableStream tableStream = metadataManagement.TableStream;
+				StorageHeader storageHeader = metadata.StorageHeader;
+				StreamHeader[] storageStreamHeaders = metadata.StreamHeaders;
+				TableStream tableStream = metadata.TableStream;
 				MetadataTable[] metadataTables = tableStream.Tables;
 				if (DEBUG_DETAIL) {
 					Console.WriteLine();
@@ -63,10 +63,10 @@ namespace Mdlib.Test {
 
 						tableRows = metadataTable.Rows;
 					}
-				StringHeap stringHeap = metadataManagement.StringHeap;
-				UserStringHeap userStringHeap = metadataManagement.UserStringHeap;
-				GuidHeap guidHeap = metadataManagement.GuidHeap;
-				BlobHeap blobHeap = metadataManagement.BlobHeap;
+				StringHeap stringHeap = metadata.StringHeap;
+				UserStringHeap userStringHeap = metadata.UserStringHeap;
+				GuidHeap guidHeap = metadata.GuidHeap;
+				BlobHeap blobHeap = metadata.BlobHeap;
 				Console.ReadKey(true);
 			}
 		}

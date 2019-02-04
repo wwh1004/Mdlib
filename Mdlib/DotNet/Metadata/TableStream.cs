@@ -74,7 +74,7 @@ namespace Mdlib.DotNet.Metadata {
 		/// </summary>
 		public MetadataTable[] Tables => _tables;
 
-		internal TableStream(IMetadataManagement metadataManagement, int index, bool isCompressed) : base(metadataManagement, index) {
+		internal TableStream(IMetadata metadata, int index, bool isCompressed) : base(metadata, index) {
 			ulong validMask;
 			uint[] rowCounts;
 			uint tablesOffset;

@@ -3,9 +3,9 @@ using Mdlib.PE;
 
 namespace Mdlib.DotNet.Metadata {
 	/// <summary>
-	/// 元数据管理接口
+	/// 元数据
 	/// </summary>
-	public interface IMetadataManagement {
+	public interface IMetadata {
 		/// <summary>
 		/// 当前元数据所属的PE映像
 		/// </summary>
@@ -57,7 +57,7 @@ namespace Mdlib.DotNet.Metadata {
 		BlobHeap BlobHeap { get; }
 	}
 
-	internal sealed class MetadataManagement : IMetadataManagement {
+	internal sealed class Metadata : IMetadata {
 		private readonly IPEImage _peImage;
 		private readonly Cor20Header _cor20Header;
 		private readonly StorageSignature _storageSignature;
@@ -89,7 +89,7 @@ namespace Mdlib.DotNet.Metadata {
 
 		public BlobHeap BlobHeap => _blobHeap;
 
-		public MetadataManagement(IPEImage peImage) {
+		public Metadata(IPEImage peImage) {
 			if (peImage == null)
 				throw new ArgumentNullException(nameof(peImage));
 			if (!peImage.IsDotNetImage)

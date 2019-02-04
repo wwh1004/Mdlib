@@ -29,17 +29,17 @@ namespace Mdlib.DotNet.Metadata {
 		/// <summary />
 		public uint Length => _length;
 
-		internal MetadataStream(IMetadataManagement metadataManagement, int index) : this(metadataManagement, metadataManagement.StreamHeaders[index]) {
+		internal MetadataStream(IMetadata metadata, int index) : this(metadata, metadata.StreamHeaders[index]) {
 		}
 
-		internal MetadataStream(IMetadataManagement metadataManagement, StreamHeader header) {
-			if (metadataManagement == null)
-				throw new ArgumentNullException(nameof(metadataManagement));
+		internal MetadataStream(IMetadata metadata, StreamHeader header) {
+			if (metadata == null)
+				throw new ArgumentNullException(nameof(metadata));
 			if (header == null)
 				throw new ArgumentNullException(nameof(header));
 
-			_peImage = metadataManagement.PEImage;
-			_offset = (uint)metadataManagement.StorageSignature.FOA + header.Offset;
+			_peImage = metadata.PEImage;
+			_offset = (uint)metadata.StorageSignature.FOA + header.Offset;
 			_rawData = (byte*)_peImage.RawData + _offset;
 			_length = header.Size;
 		}

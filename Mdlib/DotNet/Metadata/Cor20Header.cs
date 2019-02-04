@@ -102,11 +102,11 @@ namespace Mdlib.DotNet.Metadata {
 		/// <summary />
 		public DataDirectory* VTableFixupsDirectory => (DataDirectory*)&RawValue->VTableFixups;
 
-		internal Cor20Header(IMetadataManagement metadataManagement) {
-			if (metadataManagement == null)
-				throw new ArgumentNullException(nameof(metadataManagement));
+		internal Cor20Header(IMetadata metadata) {
+			if (metadata == null)
+				throw new ArgumentNullException(nameof(metadata));
 
-			_peImage = metadataManagement.PEImage;
+			_peImage = metadata.PEImage;
 			_offset = (uint)_peImage.ToFOA((RVA)_peImage.OptionalHeader.DotNetDirectory->Address);
 			_rawData = (byte*)_peImage.RawData + _offset;
 		}

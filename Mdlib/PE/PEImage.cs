@@ -76,10 +76,10 @@ namespace Mdlib.PE {
 		SectionHeader[] SectionHeaders { get; }
 
 		/// <summary>
-		/// 元数据管理接口
+		/// 元数据
 		/// </summary>
 		/// <exception cref="InvalidOperationException">非.NET程序集时引发</exception>
-		IMetadataManagement MetadataManagement { get; }
+		IMetadata Metadata { get; }
 
 		/// <summary>
 		/// FOA => RVA
@@ -174,158 +174,152 @@ namespace Mdlib.PE {
 				return buffer;
 			}
 		}
+	}
 
-		[DebuggerDisplay("FilePEImage:[P:{Utils.PointerToString(RawData)} L:{Length}]")]
-		private class FilePEImage : IPEImage {
-			private readonly void* _rawData;
-			private readonly uint _length;
-			private readonly bool _is64Bit;
-			private readonly bool _isDotNetImage;
-			private readonly DosHeader _dosHeader;
-			private readonly NtHeader _ntHeader;
-			private readonly SectionHeader[] _sectionHeaders;
-			private IMetadataManagement _metadataManagement;
-			private bool _isDisposed;
+	[DebuggerDisplay("FilePEImage:[P:{Utils.PointerToString(RawData)} L:{Length}]")]
+	internal sealed unsafe class FilePEImage : IPEImage {
+		private readonly void* _rawData;
+		private readonly uint _length;
+		private readonly bool _isDotNetImage;
+		private readonly DosHeader _dosHeader;
+		private readonly NtHeader _ntHeader;
+		private readonly SectionHeader[] _sectionHeaders;
+		private IMetadata _metadata;
+		private bool _isDisposed;
 
-			public IntPtr RawData => (IntPtr)_rawData;
+		public IntPtr RawData => (IntPtr)_rawData;
 
-			public uint Length => _length;
+		public uint Length => _length;
 
-			public bool Is64Bit => _is64Bit;
+		public bool Is64Bit => _ntHeader.Is64Bit;
 
-			public bool IsDotNetImage => _isDotNetImage;
+		public bool IsDotNetImage => _isDotNetImage;
 
-			public PEImageLayout Layout => PEImageLayout.File;
+		public PEImageLayout Layout => PEImageLayout.File;
 
-			public DosHeader DosHeader => _dosHeader;
+		public DosHeader DosHeader => _dosHeader;
 
-			public NtHeader NtHeader => _ntHeader;
+		public NtHeader NtHeader => _ntHeader;
 
-			public FileHeader FileHeader => _ntHeader.FileHeader;
+		public FileHeader FileHeader => _ntHeader.FileHeader;
 
-			public OptionalHeader OptionalHeader => _ntHeader.OptionalHeader;
+		public OptionalHeader OptionalHeader => _ntHeader.OptionalHeader;
 
-			public SectionHeader[] SectionHeaders => _sectionHeaders;
+		public SectionHeader[] SectionHeaders => _sectionHeaders;
 
-			public IMetadataManagement MetadataManagement {
-				get {
-					if (!_isDotNetImage)
-						throw new InvalidOperationException();
+		public IMetadata Metadata {
+			get {
+				if (!_isDotNetImage)
+					throw new InvalidOperationException();
 
-					if (_metadataManagement == null)
-						_metadataManagement = new MetadataManagement(this);
-					return _metadataManagement;
-				}
-			}
-
-			public FilePEImage(byte[] peImage) : this(PinByteArray(peImage), (uint)peImage.Length) {
-			}
-
-			internal FilePEImage(void* rawData, uint length) {
-				_rawData = rawData;
-				_length = length;
-				_dosHeader = new DosHeader(this);
-				_ntHeader = new NtHeader(this, out _is64Bit);
-				_sectionHeaders = new SectionHeader[_ntHeader.FileHeader.SectionsCount];
-				for (uint i = 0; i < _sectionHeaders.Length; i++)
-					_sectionHeaders[i] = new SectionHeader(this, i);
-				_isDotNetImage = _ntHeader.OptionalHeader.DotNetDirectory->Address != 0;
-			}
-
-			private static void* PinByteArray(byte[] array) {
-				IntPtr pBuffer;
-
-				pBuffer = Marshal.AllocHGlobal(array.Length);
-				Marshal.Copy(array, 0, pBuffer, array.Length);
-				return (void*)pBuffer;
-			}
-
-			public RVA ToRVA(FOA foa) {
-				foreach (SectionHeader sectionHeader in _sectionHeaders)
-					if (foa >= sectionHeader.RawAddress && foa < sectionHeader.RawAddress + sectionHeader.RawSize)
-						return foa - sectionHeader.RawAddress + sectionHeader.VirtualAddress;
-				return (RVA)foa;
-			}
-
-			public FOA ToFOA(RVA rva) {
-				foreach (SectionHeader sectionHeader in _sectionHeaders)
-					if (rva >= sectionHeader.VirtualAddress && rva < sectionHeader.VirtualAddress + Math.Max(sectionHeader.VirtualSize, sectionHeader.RawSize))
-						return rva - sectionHeader.VirtualAddress + sectionHeader.RawAddress;
-				return (FOA)rva;
-			}
-
-			public void Dispose() {
-				if (_isDisposed)
-					return;
-
-				Marshal.FreeHGlobal((IntPtr)_rawData);
-				_isDisposed = true;
+				if (_metadata == null)
+					_metadata = new Metadata(this);
+				return _metadata;
 			}
 		}
 
-		[DebuggerDisplay("MemoryPEImage:[P:{Utils.PointerToString(RawData)} L:{Length}]")]
-		private class MemoryPEImage : IPEImage {
-			private readonly void* _rawData;
-			private readonly uint _length;
-			private readonly bool _is64Bit;
-			private readonly bool _isDotNetImage;
-			private readonly DosHeader _dosHeader;
-			private readonly NtHeader _ntHeader;
-			private readonly SectionHeader[] _sectionHeaders;
-			private IMetadataManagement _metadataManagement;
+		public FilePEImage(byte[] peImage) : this(PinByteArray(peImage), (uint)peImage.Length) {
+		}
 
-			public IntPtr RawData => (IntPtr)_rawData;
+		internal FilePEImage(void* rawData, uint length) {
+			_rawData = rawData;
+			_length = length;
+			_dosHeader = new DosHeader(this);
+			_ntHeader = new NtHeader(this);
+			_sectionHeaders = new SectionHeader[_ntHeader.FileHeader.SectionsCount];
+			for (uint i = 0; i < _sectionHeaders.Length; i++)
+				_sectionHeaders[i] = new SectionHeader(this, i);
+			_isDotNetImage = _ntHeader.OptionalHeader.DotNetDirectory->Address != 0;
+		}
 
-			public uint Length => _length;
+		private static void* PinByteArray(byte[] array) {
+			IntPtr pBuffer;
 
-			public bool Is64Bit => _is64Bit;
+			pBuffer = Marshal.AllocHGlobal(array.Length);
+			Marshal.Copy(array, 0, pBuffer, array.Length);
+			return (void*)pBuffer;
+		}
 
-			public bool IsDotNetImage => _isDotNetImage;
+		public RVA ToRVA(FOA foa) {
+			foreach (SectionHeader sectionHeader in _sectionHeaders)
+				if (foa >= sectionHeader.RawAddress && foa < sectionHeader.RawAddress + sectionHeader.RawSize)
+					return foa - sectionHeader.RawAddress + sectionHeader.VirtualAddress;
+			return (RVA)foa;
+		}
 
-			public PEImageLayout Layout => PEImageLayout.Memory;
+		public FOA ToFOA(RVA rva) {
+			foreach (SectionHeader sectionHeader in _sectionHeaders)
+				if (rva >= sectionHeader.VirtualAddress && rva < sectionHeader.VirtualAddress + Math.Max(sectionHeader.VirtualSize, sectionHeader.RawSize))
+					return rva - sectionHeader.VirtualAddress + sectionHeader.RawAddress;
+			return (FOA)rva;
+		}
 
-			public DosHeader DosHeader => _dosHeader;
+		public void Dispose() {
+			if (_isDisposed)
+				return;
 
-			public NtHeader NtHeader => _ntHeader;
+			Marshal.FreeHGlobal((IntPtr)_rawData);
+			_isDisposed = true;
+		}
+	}
 
-			public FileHeader FileHeader => _ntHeader.FileHeader;
+	[DebuggerDisplay("MemoryPEImage:[P:{Utils.PointerToString(RawData)} L:{Length}]")]
+	internal sealed unsafe class MemoryPEImage : IPEImage {
+		private readonly void* _rawData;
+		private readonly uint _length;
+		private readonly bool _isDotNetImage;
+		private readonly DosHeader _dosHeader;
+		private readonly NtHeader _ntHeader;
+		private readonly SectionHeader[] _sectionHeaders;
+		private IMetadata _metadata;
 
-			public OptionalHeader OptionalHeader => _ntHeader.OptionalHeader;
+		public IntPtr RawData => (IntPtr)_rawData;
 
-			public SectionHeader[] SectionHeaders => _sectionHeaders;
+		public uint Length => _length;
 
-			public IMetadataManagement MetadataManagement {
-				get {
-					if (!_isDotNetImage)
-						throw new InvalidOperationException();
+		public bool Is64Bit => _ntHeader.Is64Bit;
 
-					if (_metadataManagement == null)
-						_metadataManagement = new MetadataManagement(this);
-					return _metadataManagement;
-				}
+		public bool IsDotNetImage => _isDotNetImage;
+
+		public PEImageLayout Layout => PEImageLayout.Memory;
+
+		public DosHeader DosHeader => _dosHeader;
+
+		public NtHeader NtHeader => _ntHeader;
+
+		public FileHeader FileHeader => _ntHeader.FileHeader;
+
+		public OptionalHeader OptionalHeader => _ntHeader.OptionalHeader;
+
+		public SectionHeader[] SectionHeaders => _sectionHeaders;
+
+		public IMetadata Metadata {
+			get {
+				if (!_isDotNetImage)
+					throw new InvalidOperationException();
+
+				if (_metadata == null)
+					_metadata = new Metadata(this);
+				return _metadata;
 			}
+		}
 
-			internal MemoryPEImage(void* rawData) {
-				_rawData = rawData;
-				_length = uint.MaxValue;
-				// TODO: 获取正确大小！！
-#pragma warning disable CS0162
-				throw new NotImplementedException();
-				_dosHeader = new DosHeader(this);
-				_ntHeader = new NtHeader(this, out _is64Bit);
-				_sectionHeaders = new SectionHeader[_ntHeader.FileHeader.SectionsCount];
-				for (uint i = 0; i < _sectionHeaders.Length; i++)
-					_sectionHeaders[i] = new SectionHeader(this, i);
-				_isDotNetImage = _ntHeader.OptionalHeader.DotNetDirectory->Address != 0;
-#pragma warning restore CS0162
-			}
+		internal MemoryPEImage(void* rawData) {
+			_rawData = null;
+			_length = 0;
+			_isDotNetImage = false;
+			_dosHeader = null;
+			_ntHeader = null;
+			_sectionHeaders = null;
+			throw new NotImplementedException();
+		}
 
-			public RVA ToRVA(FOA foa) => (RVA)foa;
+		public RVA ToRVA(FOA foa) => (RVA)foa;
 
-			public FOA ToFOA(RVA rva) => (FOA)rva;
+		public FOA ToFOA(RVA rva) => (FOA)rva;
 
-			public void Dispose() {
-			}
+		public void Dispose() {
+			throw new NotImplementedException();
 		}
 	}
 }

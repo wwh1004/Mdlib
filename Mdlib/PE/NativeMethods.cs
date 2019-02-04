@@ -8,7 +8,7 @@ namespace Mdlib {
 
 		[StructLayout(LayoutKind.Sequential, Pack = 1)]
 		public struct IMAGE_DOS_HEADER {
-			public static uint UnmanagedSize = (uint)sizeof(IMAGE_DOS_HEADER);
+			public static readonly uint UnmanagedSize = (uint)sizeof(IMAGE_DOS_HEADER);
 
 			public ushort e_magic;
 			public ushort e_cblp;
@@ -33,7 +33,7 @@ namespace Mdlib {
 
 		[StructLayout(LayoutKind.Sequential, Pack = 1)]
 		public struct IMAGE_NT_HEADERS32 {
-			public static uint UnmanagedSize = (uint)sizeof(IMAGE_NT_HEADERS32);
+			public static readonly uint UnmanagedSize = (uint)sizeof(IMAGE_NT_HEADERS32);
 
 			public uint Signature;
 			public IMAGE_FILE_HEADER FileHeader;
@@ -42,7 +42,7 @@ namespace Mdlib {
 
 		[StructLayout(LayoutKind.Sequential, Pack = 1)]
 		public struct IMAGE_NT_HEADERS64 {
-			public static uint UnmanagedSize = (uint)sizeof(IMAGE_NT_HEADERS64);
+			public static readonly uint UnmanagedSize = (uint)sizeof(IMAGE_NT_HEADERS64);
 
 			public uint Signature;
 			public IMAGE_FILE_HEADER FileHeader;
@@ -51,7 +51,7 @@ namespace Mdlib {
 
 		[StructLayout(LayoutKind.Sequential, Pack = 1)]
 		public struct IMAGE_FILE_HEADER {
-			public static uint UnmanagedSize = (uint)sizeof(IMAGE_FILE_HEADER);
+			public static readonly uint UnmanagedSize = (uint)sizeof(IMAGE_FILE_HEADER);
 
 			public ushort Machine;
 			public ushort NumberOfSections;
@@ -64,7 +64,7 @@ namespace Mdlib {
 
 		[StructLayout(LayoutKind.Sequential, Pack = 1)]
 		public struct IMAGE_OPTIONAL_HEADER32 {
-			public static uint UnmanagedSize = (uint)sizeof(IMAGE_OPTIONAL_HEADER32);
+			public static readonly uint UnmanagedSize = (uint)sizeof(IMAGE_OPTIONAL_HEADER32);
 
 			public ushort Magic;
 			public byte MajorLinkerVersion;
@@ -101,7 +101,7 @@ namespace Mdlib {
 
 		[StructLayout(LayoutKind.Sequential, Pack = 1)]
 		public struct IMAGE_OPTIONAL_HEADER64 {
-			public static uint UnmanagedSize = (uint)sizeof(IMAGE_OPTIONAL_HEADER64);
+			public static readonly uint UnmanagedSize = (uint)sizeof(IMAGE_OPTIONAL_HEADER64);
 
 			public ushort Magic;
 			public byte MajorLinkerVersion;
@@ -137,7 +137,7 @@ namespace Mdlib {
 
 		[StructLayout(LayoutKind.Sequential, Pack = 1)]
 		public struct IMAGE_DATA_DIRECTORY {
-			public static uint UnmanagedSize = (uint)sizeof(IMAGE_DATA_DIRECTORY);
+			public static readonly uint UnmanagedSize = (uint)sizeof(IMAGE_DATA_DIRECTORY);
 
 			public uint VirtualAddress;
 			public uint Size;
@@ -145,7 +145,7 @@ namespace Mdlib {
 
 		[StructLayout(LayoutKind.Sequential, Pack = 1)]
 		public struct IMAGE_SECTION_HEADER {
-			public static uint UnmanagedSize = (uint)sizeof(IMAGE_SECTION_HEADER);
+			public static readonly uint UnmanagedSize = (uint)sizeof(IMAGE_SECTION_HEADER);
 
 			public fixed byte Name[IMAGE_SIZEOF_SHORT_NAME];
 			public uint VirtualSize;
