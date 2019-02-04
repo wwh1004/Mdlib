@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9647F7A5-5524-4DCE-8A0B-CD55C436352E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mdlib</RootNamespace>
+    <AssemblyName>Mdlib</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NEED_EXTENSION_ATTRIBUTE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>7.3</LangVersion>
+    <NoWarn>IDE0032</NoWarn>
+    <DocumentationFile>..\bin\Debug\Mdlib.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\Release\</OutputPath>
+    <DefineConstants>TRACE;NEED_EXTENSION_ATTRIBUTE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>7.3</LangVersion>
+    <NoWarn>IDE0032</NoWarn>
+    <DocumentationFile>..\bin\Release\Mdlib.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Mdlib.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="DotNet\AssemblyAttributes.cs" />
+    <Compile Include="DotNet\AssemblyDef.cs" />
+    <Compile Include="DotNet\AssemblyHashAlgorithm.cs" />
+    <Compile Include="DotNet\AssemblyRef.cs" />
+    <Compile Include="DotNet\Interfaces.cs" />
+    <Compile Include="DotNet\Metadata\ComImageFlags.cs" />
+    <Compile Include="DotNet\Metadata\Cor20Header.cs" />
+    <Compile Include="DotNet\Metadata\HeapFlags.cs" />
+    <Compile Include="DotNet\Metadata\MetadataHeaps.cs" />
+    <Compile Include="DotNet\Metadata\MetadataManagement.cs" />
+    <Compile Include="DotNet\Metadata\MetadataStream.cs" />
+    <Compile Include="DotNet\Metadata\MetadataTable.cs" />
+    <Compile Include="DotNet\Metadata\MetadataToken.cs" />
+    <Compile Include="DotNet\Metadata\NativeMethods.cs" />
+    <Compile Include="DotNet\Metadata\StorageHeader.cs" />
+    <Compile Include="DotNet\Metadata\StorageSignature.cs" />
+    <Compile Include="DotNet\Metadata\StreamHeader.cs" />
+    <Compile Include="DotNet\Metadata\TableRows.cs" />
+    <Compile Include="DotNet\Metadata\TableStream.cs" />
+    <Compile Include="DotNet\Metadata\TableType.cs" />
+    <Compile Include="ExtensionAttribute.cs" />
+    <Compile Include="PE\Address.cs" />
+    <Compile Include="PE\DataDirectory.cs" />
+    <Compile Include="PE\DosHeader.cs" />
+    <Compile Include="PE\FileHeader.cs" />
+    <Compile Include="PE\IRawData.cs" />
+    <Compile Include="PE\MachineType.cs" />
+    <Compile Include="PE\NativeMethods.cs" />
+    <Compile Include="PE\NtHeader.cs" />
+    <Compile Include="PE\OptionalHeader.cs" />
+    <Compile Include="PE\OptionalHeaderType.cs" />
+    <Compile Include="PE\PEImage.cs" />
+    <Compile Include="PE\SectionHeader.cs" />
+    <Compile Include="PE\SubsystemType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Mdlib.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DotNet\Writer\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
