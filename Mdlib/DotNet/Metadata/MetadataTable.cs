@@ -62,7 +62,7 @@ namespace Mdlib.DotNet.Metadata {
 		public TableType Type => _type;
 
 		/// <summary />
-		public bool IsBigStrings => _tableStream.IsBigString;
+		public bool IsBigString => _tableStream.IsBigString;
 
 		/// <summary />
 		public bool IsBigGuid => _tableStream.IsBigGuid;

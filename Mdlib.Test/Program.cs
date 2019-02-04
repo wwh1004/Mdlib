@@ -27,11 +27,28 @@ namespace Mdlib.Test {
 			const bool DEBUG_DETAIL = true;
 
 			using (IPEImage peImage = PEImageFactory.Create("ExtremeDumper64.exe")) {
-				DosHeader dosHeader = peImage.DosHeader;
-				NtHeader ntHeader = peImage.NtHeader;
-				FileHeader fileHeader = peImage.FileHeader;
-				OptionalHeader optionalHeader = peImage.OptionalHeader;
-				SectionHeader[] sectionHeaders = peImage.SectionHeaders;
+				DosHeader dosHeader;
+				NtHeader ntHeader;
+				FileHeader fileHeader;
+				OptionalHeader optionalHeader;
+				SectionHeader[] sectionHeaders;
+				IMetadata metadata;
+				Cor20Header cor20Header;
+				StorageSignature storageSignature;
+				StorageHeader storageHeader;
+				StreamHeader[] streamHeaders;
+				TableStream tableStream;
+				MetadataTable[] metadataTables;
+				StringHeap stringHeap;
+				UserStringHeap userStringHeap;
+				GuidHeap guidHeap;
+				BlobHeap blobHeap;
+
+				dosHeader = peImage.DosHeader;
+				ntHeader = peImage.NtHeader;
+				fileHeader = peImage.FileHeader;
+				optionalHeader = peImage.OptionalHeader;
+				sectionHeaders = peImage.SectionHeaders;
 				if (DEBUG) {
 					Console.WriteLine("Section Names:");
 					foreach (SectionHeader sectionHeader in sectionHeaders)
@@ -39,17 +56,17 @@ namespace Mdlib.Test {
 					Console.WriteLine();
 					Console.WriteLine($"IsDotNetImage: {peImage.IsDotNetImage.ToString()}");
 				}
-				IMetadata metadata = peImage.Metadata;
-				Cor20Header cor20Header = metadata.Cor20Header;
-				StorageSignature storageSignature = metadata.StorageSignature;
+				metadata = peImage.Metadata;
+				cor20Header = metadata.Cor20Header;
+				storageSignature = metadata.StorageSignature;
 				if (DEBUG) {
 					Console.WriteLine();
 					Console.WriteLine($"CLR Version: {storageSignature.DisplayVersionString}");
 				}
-				StorageHeader storageHeader = metadata.StorageHeader;
-				StreamHeader[] storageStreamHeaders = metadata.StreamHeaders;
-				TableStream tableStream = metadata.TableStream;
-				MetadataTable[] metadataTables = tableStream.Tables;
+				storageHeader = metadata.StorageHeader;
+				streamHeaders = metadata.StreamHeaders;
+				tableStream = metadata.TableStream;
+				metadataTables = tableStream.Tables;
 				if (DEBUG_DETAIL) {
 					Console.WriteLine();
 					Console.WriteLine("MetadataTables:");
@@ -63,10 +80,10 @@ namespace Mdlib.Test {
 
 						tableRows = metadataTable.Rows;
 					}
-				StringHeap stringHeap = metadata.StringHeap;
-				UserStringHeap userStringHeap = metadata.UserStringHeap;
-				GuidHeap guidHeap = metadata.GuidHeap;
-				BlobHeap blobHeap = metadata.BlobHeap;
+				stringHeap = metadata.StringHeap;
+				userStringHeap = metadata.UserStringHeap;
+				guidHeap = metadata.GuidHeap;
+				blobHeap = metadata.BlobHeap;
 				Console.ReadKey(true);
 			}
 		}
