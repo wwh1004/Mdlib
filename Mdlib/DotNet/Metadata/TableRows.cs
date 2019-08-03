@@ -31,17 +31,29 @@ namespace Mdlib.DotNet.Metadata {
 			_index = index;
 		}
 
-		protected static uint ToOffsetSize(bool flag) => flag ? 4u : 2;
+		protected static uint ToOffsetSize(bool flag) {
+			return flag ? 4u : 2;
+		}
 
-		protected static byte ReadByte(void* address) => *(byte*)address;
+		protected static byte ReadByte(void* address) {
+			return *(byte*)address;
+		}
 
-		protected static short ReadInt16(void* address) => *(short*)address;
+		protected static short ReadInt16(void* address) {
+			return *(short*)address;
+		}
 
-		protected static ushort ReadUInt16(void* address) => *(ushort*)address;
+		protected static ushort ReadUInt16(void* address) {
+			return *(ushort*)address;
+		}
 
-		protected static uint ReadUInt32(void* address) => *(uint*)address;
+		protected static uint ReadUInt32(void* address) {
+			return *(uint*)address;
+		}
 
-		protected static uint ReadHeapOffset(void* address, bool flag) => flag ? *(uint*)address : *(ushort*)address;
+		protected static uint ReadHeapOffset(void* address, bool flag) {
+			return flag ? *(uint*)address : *(ushort*)address;
+		}
 	}
 
 	/// <summary>

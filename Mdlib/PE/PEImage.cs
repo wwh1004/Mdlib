@@ -105,38 +105,48 @@ namespace Mdlib.PE {
 		/// </summary>
 		/// <param name="filePath">PE映像文件路径</param>
 		/// <returns></returns>
-		public static IPEImage Create(string filePath) => Create(File.ReadAllBytes(filePath));
+		public static IPEImage Create(string filePath) {
+			return Create(File.ReadAllBytes(filePath));
+		}
 
 		/// <summary>
 		/// 创建 <see cref="IPEImage"/> 实例，使用文件布局
 		/// </summary>
 		/// <param name="peImage">PE映像数据</param>
 		/// <returns></returns>
-		public static IPEImage Create(Stream peImage) => Create(ReadStreamAllBytes(peImage));
+		public static IPEImage Create(Stream peImage) {
+			return Create(ReadStreamAllBytes(peImage));
+		}
 
 		/// <summary>
 		/// 创建 <see cref="IPEImage"/> 实例，使用文件布局
 		/// </summary>
 		/// <param name="peImage">PE映像数据</param>
 		/// <returns></returns>
-		public static IPEImage Create(byte[] peImage) => new FilePEImage(peImage);
+		public static IPEImage Create(byte[] peImage) {
+			return new FilePEImage(peImage);
+		}
 
 		/// <summary>
 		/// 创建 <see cref="IPEImage"/> 实例，使用内存布局
 		/// </summary>
 		/// <param name="pPEImage">PE映像地址</param>
 		/// <returns></returns>
-		public static IPEImage Create(IntPtr pPEImage) => Create((void*)pPEImage);
+		public static IPEImage Create(IntPtr pPEImage) {
+			return Create((void*)pPEImage);
+		}
 
 		/// <summary>
 		/// 创建 <see cref="IPEImage"/> 实例，使用内存布局
 		/// </summary>
 		/// <param name="pPEImage">PE映像地址</param>
 		/// <returns></returns>
-		public static IPEImage Create(void* pPEImage) => new MemoryPEImage(pPEImage);
+		public static IPEImage Create(void* pPEImage) {
+			return new MemoryPEImage(pPEImage);
+		}
 
 		private static byte[] ReadStreamAllBytes(Stream stream) {
-			if (stream == null)
+			if (stream is null)
 				throw new ArgumentNullException(nameof(stream));
 
 			int length;
@@ -212,7 +222,7 @@ namespace Mdlib.PE {
 				if (!_isDotNetImage)
 					throw new InvalidOperationException();
 
-				if (_metadata == null)
+				if (_metadata is null)
 					_metadata = new Metadata(this);
 				return _metadata;
 			}
@@ -226,7 +236,7 @@ namespace Mdlib.PE {
 			_length = length;
 			_dosHeader = new DosHeader(this);
 			_ntHeader = new NtHeader(this);
-			_sectionHeaders = new SectionHeader[_ntHeader.FileHeader.SectionsCount];
+			_sectionHeaders = new SectionHeader[_ntHeader.FileHeader.SectionCount];
 			for (uint i = 0; i < _sectionHeaders.Length; i++)
 				_sectionHeaders[i] = new SectionHeader(this, i);
 			_isDotNetImage = _ntHeader.OptionalHeader.DotNetDirectory->Address != 0;
@@ -298,7 +308,7 @@ namespace Mdlib.PE {
 				if (!_isDotNetImage)
 					throw new InvalidOperationException();
 
-				if (_metadata == null)
+				if (_metadata is null)
 					_metadata = new Metadata(this);
 				return _metadata;
 			}
@@ -314,9 +324,13 @@ namespace Mdlib.PE {
 			throw new NotImplementedException();
 		}
 
-		public RVA ToRVA(FOA foa) => (RVA)foa;
+		public RVA ToRVA(FOA foa) {
+			return (RVA)foa;
+		}
 
-		public FOA ToFOA(RVA rva) => (FOA)rva;
+		public FOA ToFOA(RVA rva) {
+			return (FOA)rva;
+		}
 
 		public void Dispose() {
 			throw new NotImplementedException();

@@ -80,8 +80,6 @@
   <ItemGroup>
     <None Include="Mdlib.snk" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DotNet\Writer\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

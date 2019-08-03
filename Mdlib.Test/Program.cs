@@ -71,11 +71,11 @@ namespace Mdlib.Test {
 					Console.WriteLine();
 					Console.WriteLine("MetadataTables:");
 					foreach (MetadataTable metadataTable in metadataTables)
-						if (metadataTable != null)
+						if (!(metadataTable is null))
 							Console.WriteLine($"  {metadataTable.Type.ToString()}: RowSize={metadataTable.RowSize.ToString()} RowCount={metadataTable.RowCount.ToString()}");
 				}
 				foreach (MetadataTable metadataTable in metadataTables)
-					if (metadataTable != null) {
+					if (!(metadataTable is null)) {
 						TableRow[] tableRows;
 
 						tableRows = metadataTable.Rows;

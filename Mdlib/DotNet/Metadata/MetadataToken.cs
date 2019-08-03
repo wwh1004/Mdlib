@@ -69,15 +69,23 @@ namespace Mdlib.DotNet.Metadata {
 		public static bool operator !=(MetadataToken left, MetadataToken right) => left._value != right._value;
 
 		/// <summary />
-		public bool Equals(MetadataToken other) => _value == other._value;
+		public bool Equals(MetadataToken other) {
+			return _value == other._value;
+		}
 
 		/// <summary />
-		public override bool Equals(object obj) => obj is MetadataToken ? _value == ((MetadataToken)obj)._value : false;
+		public override bool Equals(object obj) {
+			return obj is MetadataToken ? _value == ((MetadataToken)obj)._value : false;
+		}
 
 		/// <summary />
-		public override int GetHashCode() => (int)_value;
+		public override int GetHashCode() {
+			return (int)_value;
+		}
 
 		/// <summary />
-		public override string ToString() => "0x" + _value.ToString("X8");
+		public override string ToString() {
+			return "0x" + _value.ToString("X8");
+		}
 	}
 }
