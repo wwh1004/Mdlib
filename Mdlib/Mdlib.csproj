@@ -73,7 +73,7 @@
     <Compile Include="PE\OptionalHeaderType.cs" />
     <Compile Include="PE\PEImage.cs" />
     <Compile Include="PE\SectionHeader.cs" />
-    <Compile Include="PE\SubsystemType.cs" />
+    <Compile Include="PE\Subsystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
