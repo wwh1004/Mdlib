@@ -66,7 +66,7 @@
     <Compile Include="PE\DosHeader.cs" />
     <Compile Include="PE\FileHeader.cs" />
     <Compile Include="PE\IRawData.cs" />
-    <Compile Include="PE\MachineType.cs" />
+    <Compile Include="PE\Machine.cs" />
     <Compile Include="PE\NativeMethods.cs" />
     <Compile Include="PE\NtHeader.cs" />
     <Compile Include="PE\OptionalHeader.cs" />
