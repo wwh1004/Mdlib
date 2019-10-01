@@ -1,14 +1,13 @@
 using System;
 using System.Diagnostics;
 using Mdlib.PE;
-using static Mdlib.DotNet.Metadata.NativeMethods;
 
 namespace Mdlib.DotNet.Metadata {
 	/// <summary>
 	/// 存储头
 	/// </summary>
-	[DebuggerDisplay("StgHdr:[P:{Utils.PointerToString(RawData)} RVA:{RVA} FOA:{FOA} SC:{StreamCount}]")]
-	public sealed unsafe class StorageHeader : IRawData<STORAGEHEADER> {
+	[DebuggerDisplay("StgHdr:[P:{Utils.PointerToString(RawData)} RVA:{RVA} FileOffset:{FileOffset} SC:{StreamCount}]")]
+	internal sealed unsafe class StorageHeader : IRawData<STORAGEHEADER> {
 		private readonly IPEImage _peImage;
 		private readonly void* _rawData;
 		private readonly uint _offset;
@@ -20,10 +19,10 @@ namespace Mdlib.DotNet.Metadata {
 		public STORAGEHEADER* RawValue => (STORAGEHEADER*)_rawData;
 
 		/// <summary />
-		public RVA RVA => _peImage.ToRVA((FOA)_offset);
+		public RVA RVA => _peImage.ToRVA((FileOffset)_offset);
 
 		/// <summary />
-		public FOA FOA => (FOA)_offset;
+		public FileOffset FileOffset => (FileOffset)_offset;
 
 		/// <summary />
 		public uint Length => STORAGEHEADER.UnmanagedSize;
@@ -51,7 +50,7 @@ namespace Mdlib.DotNet.Metadata {
 				throw new ArgumentNullException(nameof(metadata));
 
 			_peImage = metadata.PEImage;
-			_offset = (uint)metadata.StorageSignature.FOA + metadata.StorageSignature.Length;
+			_offset = (uint)metadata.StorageSignature.FileOffset + metadata.StorageSignature.Length;
 			_rawData = (byte*)_peImage.RawData + _offset;
 		}
 	}

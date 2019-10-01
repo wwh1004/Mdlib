@@ -1,16 +1,16 @@
 using System;
 using System.Diagnostics;
 using System.Text;
-using static Mdlib.PE.NativeMethods;
+using static Mdlib.PE.NativeConstants;
 
 namespace Mdlib.PE {
 	/// <summary>
 	/// 节头
 	/// </summary>
-	[DebuggerDisplay("SectHdr:[P:{Utils.PointerToString(RawData)} RVA:{RVA} FOA:{FOA} N:{DisplayName}]")]
-	public sealed unsafe class SectionHeader : IRawData<IMAGE_SECTION_HEADER> {
-		private readonly void* _rawData;
-		private readonly uint _offset;
+	[DebuggerDisplay("SectHdr:[P:{Utils.PointerToString(RawData)} RVA:{RVA} FileOffset:{FileOffset} N:{DisplayName}]")]
+	internal sealed unsafe class SectionHeader : IRawData<IMAGE_SECTION_HEADER> {
+		private void* _rawData;
+		private uint _offset;
 		private string _displayName;
 
 		/// <summary />
@@ -23,7 +23,7 @@ namespace Mdlib.PE {
 		public RVA RVA => (RVA)_offset;
 
 		/// <summary />
-		public FOA FOA => (FOA)_offset;
+		public FileOffset FileOffset => (FileOffset)_offset;
 
 		/// <summary />
 		public uint Length => IMAGE_SECTION_HEADER.UnmanagedSize;
@@ -50,8 +50,8 @@ namespace Mdlib.PE {
 		}
 
 		/// <summary />
-		public FOA RawAddress {
-			get => (FOA)RawValue->PointerToRawData;
+		public FileOffset RawAddress {
+			get => (FileOffset)RawValue->PointerToRawData;
 			set => RawValue->PointerToRawData = (uint)value;
 		}
 
@@ -70,12 +70,26 @@ namespace Mdlib.PE {
 			}
 		}
 
-		internal SectionHeader(IPEImage peImage, uint index) {
+		private SectionHeader() {
+		}
+
+		public static SectionHeader Create(IPEImage peImage, uint index) {
 			if (peImage is null)
 				throw new ArgumentNullException(nameof(peImage));
 
-			_offset = (uint)peImage.FileHeader.FOA + IMAGE_FILE_HEADER.UnmanagedSize + peImage.FileHeader.OptionalHeaderSize + index * IMAGE_SECTION_HEADER.UnmanagedSize;
-			_rawData = (byte*)peImage.RawData + _offset;
+			FileHeader fileHeader;
+			uint offset;
+			SectionHeader sectionHeader;
+
+			fileHeader = peImage.NtHeader.FileHeader;
+			offset = (uint)fileHeader.FileOffset + IMAGE_FILE_HEADER.UnmanagedSize + fileHeader.RawValue->SizeOfOptionalHeader + index * IMAGE_SECTION_HEADER.UnmanagedSize;
+			if (!Utils.IsValidPointer((byte*)peImage.RawData + offset, IMAGE_SECTION_HEADER.UnmanagedSize))
+				return null;
+			sectionHeader = new SectionHeader {
+				_offset = offset,
+				_rawData = (byte*)peImage.RawData + offset
+			};
+			return sectionHeader;
 		}
 
 		/// <summary>

@@ -1,6 +1,6 @@
 using System;
 using System.Diagnostics;
-using static Mdlib.NativeMethods;
+using static Mdlib.PE.NativeMethods;
 
 namespace Mdlib.PE {
 	/// <summary>

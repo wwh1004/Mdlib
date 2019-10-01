@@ -1,12 +1,12 @@
 using System;
 using System.Diagnostics;
-using static Mdlib.NativeMethods;
+using static Mdlib.PE.NativeMethods;
 
 namespace Mdlib.PE {
 	/// <summary>
 	/// 文件头
 	/// </summary>
-	[DebuggerDisplay("FileHdr:[P:{Utils.PointerToString(RawData)} RVA:{RVA} FOA:{FOA} MT:{MachineType}]")]
+	[DebuggerDisplay("FileHdr:[P:{Utils.PointerToString(RawData)} RVA:{RVA} FOA:{FOA} M:{Machine}]")]
 	public sealed unsafe class FileHeader : IRawData<IMAGE_FILE_HEADER> {
 		private readonly void* _rawData;
 		private readonly uint _offset;

@@ -1,6 +1,6 @@
 #pragma warning disable CS1591
 using System.Runtime.InteropServices;
-using static Mdlib.NativeMethods;
+using static Mdlib.PE.NativeMethods;
 
 namespace Mdlib.DotNet.Metadata {
 	public static unsafe class NativeMethods {
