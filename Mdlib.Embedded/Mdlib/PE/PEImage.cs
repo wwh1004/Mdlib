@@ -186,7 +186,7 @@ namespace Mdlib.PE {
 		}
 	}
 
-	[DebuggerDisplay("PEImage({Layout}):[P:{MdlibUtils.PointerToString(RawData)} L:{Length}]")]
+	[DebuggerDisplay("PEImage:[P:{MdlibUtils.PointerToString(RawData)} Layout:{Layout}]")]
 	internal sealed unsafe class PEImage : IPEImage {
 		private readonly void* _rawData;
 		private readonly ImageLayout _layout;
@@ -235,9 +235,13 @@ namespace Mdlib.PE {
 		public RVA ToRVA(FileOffset fileOffset) {
 			switch (_layout) {
 			case ImageLayout.File:
-				foreach (SectionHeader sectionHeader in _sectionHeaders)
-					if ((uint)fileOffset >= sectionHeader.RawValue->VirtualAddress && (uint)fileOffset < sectionHeader.RawValue->VirtualAddress + sectionHeader.RawValue->SizeOfRawData)
-						return (RVA)fileOffset - sectionHeader.RawValue->VirtualAddress + sectionHeader.RawValue->VirtualAddress;
+				foreach (SectionHeader sectionHeader in _sectionHeaders) {
+					IMAGE_SECTION_HEADER* pSectionHeader;
+
+					pSectionHeader = sectionHeader.RawValue;
+					if ((uint)fileOffset >= pSectionHeader->PointerToRawData && (uint)fileOffset < pSectionHeader->PointerToRawData + pSectionHeader->SizeOfRawData)
+						return (RVA)fileOffset - pSectionHeader->PointerToRawData + pSectionHeader->VirtualAddress;
+				}
 				return (RVA)fileOffset;
 			case ImageLayout.Memory:
 				return (RVA)fileOffset;
@@ -249,9 +253,13 @@ namespace Mdlib.PE {
 		public FileOffset ToFileOffset(RVA rva) {
 			switch (_layout) {
 			case ImageLayout.File:
-				foreach (SectionHeader sectionHeader in _sectionHeaders)
-					if ((uint)rva >= sectionHeader.RawValue->VirtualAddress && (uint)rva < sectionHeader.RawValue->VirtualAddress + Math.Max(sectionHeader.RawValue->VirtualSize, sectionHeader.RawValue->SizeOfRawData))
-						return (FileOffset)rva - sectionHeader.RawValue->VirtualAddress + sectionHeader.RawValue->VirtualAddress;
+				foreach (SectionHeader sectionHeader in _sectionHeaders) {
+					IMAGE_SECTION_HEADER* pSectionHeader;
+
+					pSectionHeader = sectionHeader.RawValue;
+					if ((uint)rva >= pSectionHeader->VirtualAddress && (uint)rva < pSectionHeader->VirtualAddress + Math.Max(pSectionHeader->VirtualSize, pSectionHeader->SizeOfRawData))
+						return (FileOffset)rva - pSectionHeader->VirtualAddress + pSectionHeader->PointerToRawData;
+				}
 				return (FileOffset)rva;
 			case ImageLayout.Memory:
 				return (FileOffset)rva;
@@ -308,7 +316,7 @@ namespace Mdlib.PE {
 			if (destination is null)
 				throw new ArgumentNullException(nameof(destination));
 
-			Marshal.Copy((IntPtr)_rawData, destination, index, (int)length);
+			Marshal.Copy((IntPtr)((byte*)_rawData + (uint)fileOffset), destination, index, (int)length);
 		}
 
 		public void Read(FileOffset fileOffset, void* pDestination, uint length) {
@@ -316,7 +324,7 @@ namespace Mdlib.PE {
 				throw new ArgumentNullException(nameof(pDestination));
 
 			for (uint i = 0; i < length; i++)
-				*((byte*)pDestination + i) = *((byte*)_rawData + i);
+				*((byte*)pDestination + (uint)fileOffset + i) = *((byte*)_rawData + i);
 		}
 
 		public void Write(FileOffset fileOffset, byte[] source) {
@@ -330,7 +338,7 @@ namespace Mdlib.PE {
 			if (source is null)
 				throw new ArgumentNullException(nameof(source));
 
-			Marshal.Copy(source, index, (IntPtr)_rawData, (int)length);
+			Marshal.Copy(source, index, (IntPtr)((byte*)_rawData + (uint)fileOffset), (int)length);
 		}
 
 		public void Write(FileOffset fileOffset, void* pSource, uint length) {
@@ -338,7 +346,7 @@ namespace Mdlib.PE {
 				throw new ArgumentNullException(nameof(pSource));
 
 			for (uint i = 0; i < length; i++)
-				*((byte*)_rawData + i) = *((byte*)pSource + i);
+				*((byte*)_rawData + (uint)fileOffset + i) = *((byte*)pSource + i);
 		}
 	}
 }
