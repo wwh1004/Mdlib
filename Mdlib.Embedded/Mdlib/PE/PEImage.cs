@@ -92,14 +92,6 @@ namespace Mdlib.PE {
 		/// <summary>
 		/// 读取数据
 		/// </summary>
-		/// <param name="rva"></param>
-		/// <param name="length"></param>
-		/// <returns></returns>
-		byte[] Read(RVA rva, uint length);
-
-		/// <summary>
-		/// 读取数据
-		/// </summary>
 		/// <param name="fileOffset"></param>
 		/// <param name="length"></param>
 		/// <returns></returns>
@@ -108,11 +100,9 @@ namespace Mdlib.PE {
 		/// <summary>
 		/// 读取数据
 		/// </summary>
-		/// <param name="rva"></param>
+		/// <param name="fileOffset"></param>
 		/// <param name="destination"></param>
-		/// <param name="index"></param>
-		/// <param name="length"></param>
-		void Read(RVA rva, byte[] destination, int index, uint length);
+		void Read(FileOffset fileOffset, byte[] destination);
 
 		/// <summary>
 		/// 读取数据
@@ -134,11 +124,9 @@ namespace Mdlib.PE {
 		/// <summary>
 		/// 写入数据
 		/// </summary>
-		/// <param name="rva"></param>
+		/// <param name="fileOffset"></param>
 		/// <param name="source"></param>
-		/// <param name="index"></param>
-		/// <param name="length"></param>
-		void Write(RVA rva, byte[] source, int index, uint length);
+		void Write(FileOffset fileOffset, byte[] source);
 
 		/// <summary>
 		/// 写入数据
@@ -301,14 +289,6 @@ namespace Mdlib.PE {
 			_isDotNet = _ntHeader.OptionalHeader.DataDirectories[IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR].Address != 0;
 		}
 
-		public byte[] Read(RVA rva, uint length) {
-			byte[] buffer;
-
-			buffer = new byte[length];
-			Read(rva, buffer, 0, length);
-			return buffer;
-		}
-
 		public byte[] Read(FileOffset fileOffset, uint length) {
 			byte[] buffer;
 
@@ -317,11 +297,11 @@ namespace Mdlib.PE {
 			return buffer;
 		}
 
-		public void Read(RVA rva, byte[] destination, int index, uint length) {
+		public void Read(FileOffset fileOffset, byte[] destination) {
 			if (destination is null)
 				throw new ArgumentNullException(nameof(destination));
 
-			Read(ToFileOffset(rva), destination, index, length);
+			Read(fileOffset, destination, 0, (uint)destination.Length);
 		}
 
 		public void Read(FileOffset fileOffset, byte[] destination, int index, uint length) {
@@ -339,11 +319,11 @@ namespace Mdlib.PE {
 				*((byte*)pDestination + i) = *((byte*)_rawData + i);
 		}
 
-		public void Write(RVA rva, byte[] source, int index, uint length) {
+		public void Write(FileOffset fileOffset, byte[] source) {
 			if (source is null)
 				throw new ArgumentNullException(nameof(source));
 
-			Write(ToFileOffset(rva), source, index, length);
+			Write(fileOffset, source, 0, (uint)source.Length);
 		}
 
 		public void Write(FileOffset fileOffset, byte[] source, int index, uint length) {
