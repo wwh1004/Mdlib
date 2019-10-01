@@ -5,7 +5,7 @@ namespace Mdlib.PE {
 	/// <summary>
 	/// 文件头
 	/// </summary>
-	[DebuggerDisplay("FileHdr:[P:{Utils.PointerToString(RawData)} RVA:{RVA} FileOffset:{FileOffset} M:{Machine}]")]
+	[DebuggerDisplay("FileHdr:[P:{MdlibUtils.PointerToString(RawData)} RVA:{RVA} FileOffset:{FileOffset} M:{Machine}]")]
 	internal sealed unsafe class FileHeader : IRawData<IMAGE_FILE_HEADER> {
 		private void* _rawData;
 		private uint _offset;

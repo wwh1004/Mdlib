@@ -7,7 +7,7 @@ namespace Mdlib.DotNet.Metadata {
 	/// <summary>
 	/// Cor20头
 	/// </summary>
-	[DebuggerDisplay("CorHdr:[P:{Utils.PointerToString(RawData)} RVA:{RVA} FileOffset:{FileOffset}]")]
+	[DebuggerDisplay("CorHdr:[P:{MdlibUtils.PointerToString(RawData)} RVA:{RVA} FileOffset:{FileOffset}]")]
 	internal sealed unsafe class Cor20Header : IRawData<IMAGE_COR20_HEADER> {
 		private readonly IPEImage _peImage;
 		private readonly void* _rawData;
@@ -70,7 +70,7 @@ namespace Mdlib.DotNet.Metadata {
 					throw new ArgumentNullException(nameof(value));
 
 				Flags &= ~ComImageFlags.NativeEntryPoint;
-				RawValue->EntryPointTokenOrRVA = (uint)value.Value;
+				RawValue->EntryPointTokenOrRVA = value.Value;
 			}
 		}
 

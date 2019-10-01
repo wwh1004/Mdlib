@@ -8,7 +8,7 @@ namespace Mdlib.DotNet.Metadata {
 	/// <summary>
 	/// 元数据流头
 	/// </summary>
-	[DebuggerDisplay("StmHdr:[P:{Utils.PointerToString(RawData)} RVA:{RVA} FileOffset:{FileOffset} N:{DisplayName}]")]
+	[DebuggerDisplay("StmHdr:[P:{MdlibUtils.PointerToString(RawData)} RVA:{RVA} FileOffset:{FileOffset} N:{DisplayName}]")]
 	internal sealed unsafe class StreamHeader : IRawData<STORAGESTREAM> {
 		private readonly IPEImage _peImage;
 		private readonly void* _rawData;

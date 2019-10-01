@@ -186,7 +186,7 @@ namespace Mdlib.PE {
 		}
 	}
 
-	[DebuggerDisplay("PEImage({Layout}):[P:{Utils.PointerToString(RawData)} L:{Length}]")]
+	[DebuggerDisplay("PEImage({Layout}):[P:{MdlibUtils.PointerToString(RawData)} L:{Length}]")]
 	internal sealed unsafe class PEImage : IPEImage {
 		private readonly void* _rawData;
 		private readonly ImageLayout _layout;

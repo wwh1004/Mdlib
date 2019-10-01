@@ -6,7 +6,7 @@ namespace Mdlib.DotNet.Metadata {
 	/// <summary>
 	/// 存储头
 	/// </summary>
-	[DebuggerDisplay("StgHdr:[P:{Utils.PointerToString(RawData)} RVA:{RVA} FileOffset:{FileOffset} SC:{StreamCount}]")]
+	[DebuggerDisplay("StgHdr:[P:{MdlibUtils.PointerToString(RawData)} RVA:{RVA} FileOffset:{FileOffset} SC:{StreamCount}]")]
 	internal sealed unsafe class StorageHeader : IRawData<STORAGEHEADER> {
 		private readonly IPEImage _peImage;
 		private readonly void* _rawData;

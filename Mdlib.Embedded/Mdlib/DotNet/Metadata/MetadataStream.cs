@@ -6,7 +6,7 @@ namespace Mdlib.DotNet.Metadata {
 	/// <summary>
 	/// 元数据流
 	/// </summary>
-	[DebuggerDisplay("MdStm:[P:{Utils.PointerToString(RawData)} RVA:{RVA} FileOffset:{FileOffset} L:{Length}]")]
+	[DebuggerDisplay("MdStm:[P:{MdlibUtils.PointerToString(RawData)} RVA:{RVA} FileOffset:{FileOffset} L:{Length}]")]
 	internal abstract unsafe class MetadataStream : IRawData {
 		/// <summary />
 		protected readonly IPEImage _peImage;

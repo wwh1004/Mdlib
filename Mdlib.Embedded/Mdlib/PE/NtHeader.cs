@@ -5,7 +5,7 @@ namespace Mdlib.PE {
 	/// <summary>
 	/// Nt头
 	/// </summary>
-	[DebuggerDisplay("NtHdr:[P:{Utils.PointerToString(RawData)} RVA:{RVA} FileOffset:{FileOffset}]")]
+	[DebuggerDisplay("NtHdr:[P:{MdlibUtils.PointerToString(RawData)} RVA:{RVA} FileOffset:{FileOffset}]")]
 	internal sealed unsafe class NtHeader : IRawData {
 		private void* _rawData;
 		private uint _offset;

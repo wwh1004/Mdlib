@@ -6,7 +6,7 @@ namespace Mdlib.PE {
 	/// <summary>
 	/// 可选头
 	/// </summary>
-	[DebuggerDisplay("OptHdr:[P:{Utils.PointerToString(RawData)} RVA:{RVA} FileOffset:{FileOffset}]")]
+	[DebuggerDisplay("OptHdr:[P:{MdlibUtils.PointerToString(RawData)} RVA:{RVA} FileOffset:{FileOffset}]")]
 	internal sealed unsafe class OptionalHeader : IRawData {
 		private void* _rawData;
 		private uint _offset;
