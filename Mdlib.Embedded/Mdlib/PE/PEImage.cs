@@ -55,6 +55,16 @@ namespace Mdlib.PE {
 		NtHeader NtHeader { get; }
 
 		/// <summary>
+		/// 文件头
+		/// </summary>
+		FileHeader FileHeader { get; }
+
+		/// <summary>
+		/// 可选头
+		/// </summary>
+		OptionalHeader OptionalHeader { get; }
+
+		/// <summary>
 		/// 节头
 		/// </summary>
 		SectionHeader[] SectionHeaders { get; }
@@ -176,6 +186,10 @@ namespace Mdlib.PE {
 		public DosHeader DosHeader => _dosHeader;
 
 		public NtHeader NtHeader => _ntHeader;
+
+		public FileHeader FileHeader => _ntHeader.FileHeader;
+
+		public OptionalHeader OptionalHeader => _ntHeader.OptionalHeader;
 
 		public SectionHeader[] SectionHeaders => _sectionHeaders;
 

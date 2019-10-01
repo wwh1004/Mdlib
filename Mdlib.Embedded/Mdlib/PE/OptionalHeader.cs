@@ -156,6 +156,7 @@ namespace Mdlib.PE {
 			get => Unsafe32->Win32VersionValue;
 			set => Unsafe32->Win32VersionValue = value;
 		}
+
 		/// <summary />
 		public uint SizeOfImage {
 			get => Unsafe32->SizeOfImage;
