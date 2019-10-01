@@ -18,6 +18,10 @@ namespace Mdlib {
 			}
 		}
 
+		public static uint AlignUp(uint value, uint alignment) {
+			return (value + alignment - 1) & ~(alignment - 1);
+		}
+
 		public static string PointerToString(IntPtr value) {
 			return "0x" + ((ulong)value > uint.MaxValue ? value.ToString("X16") : value.ToString("X8"));
 		}

@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using Mdlib.DotNet.Metadata;
 using static Mdlib.PE.NativeConstants;
 
@@ -77,6 +78,40 @@ namespace Mdlib.PE {
 		/// <param name="rva">RVA</param>
 		/// <returns></returns>
 		FileOffset ToFileOffset(RVA rva);
+
+		/// <summary>
+		/// 复制数据
+		/// </summary>
+		/// <param name="rva"></param>
+		/// <param name="length"></param>
+		/// <returns></returns>
+		byte[] Copy(RVA rva, uint length);
+
+		/// <summary>
+		/// 复制数据
+		/// </summary>
+		/// <param name="fileOffset"></param>
+		/// <param name="length"></param>
+		/// <returns></returns>
+		byte[] Copy(FileOffset fileOffset, uint length);
+
+		/// <summary>
+		/// 复制数据
+		/// </summary>
+		/// <param name="rva"></param>
+		/// <param name="destination"></param>
+		/// <param name="index"></param>
+		/// <param name="length"></param>
+		void CopyTo(RVA rva, byte[] destination, int index, uint length);
+
+		/// <summary>
+		/// 复制数据
+		/// </summary>
+		/// <param name="fileOffset"></param>
+		/// <param name="destination"></param>
+		/// <param name="index"></param>
+		/// <param name="length"></param>
+		void CopyTo(FileOffset fileOffset, byte[] destination, int index, uint length);
 
 		/// <summary>
 		/// 重新加载
@@ -216,6 +251,36 @@ namespace Mdlib.PE {
 				}
 			}
 			_isDotNet = _ntHeader.OptionalHeader.DataDirectories[IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR].Address != 0;
+		}
+
+		public byte[] Copy(RVA rva, uint length) {
+			byte[] buffer;
+
+			buffer = new byte[length];
+			CopyTo(rva, buffer, 0, length);
+			return buffer;
+		}
+
+		public byte[] Copy(FileOffset fileOffset, uint length) {
+			byte[] buffer;
+
+			buffer = new byte[length];
+			CopyTo(fileOffset, buffer, 0, length);
+			return buffer;
+		}
+
+		public void CopyTo(RVA rva, byte[] destination, int index, uint length) {
+			if (destination is null)
+				throw new ArgumentNullException(nameof(destination));
+
+			CopyTo(ToFileOffset(rva), destination, index, length);
+		}
+
+		public void CopyTo(FileOffset fileOffset, byte[] destination, int index, uint length) {
+			if (destination is null)
+				throw new ArgumentNullException(nameof(destination));
+
+			Marshal.Copy((IntPtr)_rawData, destination, index, (int)length);
 		}
 	}
 }
