@@ -37,7 +37,6 @@
     <NoWarn>IDE0032</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Mdlib\_AssemblyInfo.cs" />
     <Compile Include="Mdlib\DotNet\Metadata\ComImageFlags.cs" />
     <Compile Include="Mdlib\DotNet\Metadata\Cor20Header.cs" />
     <Compile Include="Mdlib\DotNet\Metadata\HeapFlags.cs" />
@@ -47,8 +46,11 @@
     <Compile Include="Mdlib\DotNet\Metadata\StorageHeader.cs" />
     <Compile Include="Mdlib\DotNet\Metadata\StorageSignature.cs" />
     <Compile Include="Mdlib\DotNet\Metadata\StreamHeader.cs" />
+    <Compile Include="Mdlib\EmbeddedAssemblyInfo.cs" />
     <Compile Include="Mdlib\PE\Address.cs" />
+    <Compile Include="Mdlib\PE\Characteristics.cs" />
     <Compile Include="Mdlib\PE\DataDirectory.cs" />
+    <Compile Include="Mdlib\PE\DllCharacteristics.cs" />
     <Compile Include="Mdlib\PE\DosHeader.cs" />
     <Compile Include="Mdlib\PE\Extensions.cs" />
     <Compile Include="Mdlib\PE\FileHeader.cs" />
