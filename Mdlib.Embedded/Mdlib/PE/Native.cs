@@ -3,8 +3,9 @@ using static Mdlib.PE.NativeConstants;
 
 namespace Mdlib.PE {
 	internal static class NativeConstants {
+		public const ushort IMAGE_NT_OPTIONAL_HDR32_MAGIC = 0x010B;
+		public const ushort IMAGE_NT_OPTIONAL_HDR64_MAGIC = 0x020B;
 		public const ushort IMAGE_NUMBEROF_DIRECTORY_ENTRIES = 16;
-		public const ushort IMAGE_SIZEOF_SHORT_NAME = 8;
 		public const ushort IMAGE_DIRECTORY_ENTRY_EXPORT = 0;
 		public const ushort IMAGE_DIRECTORY_ENTRY_IMPORT = 1;
 		public const ushort IMAGE_DIRECTORY_ENTRY_RESOURCE = 2;
@@ -20,6 +21,7 @@ namespace Mdlib.PE {
 		public const ushort IMAGE_DIRECTORY_ENTRY_IAT = 12;
 		public const ushort IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT = 13;
 		public const ushort IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR = 14;
+		public const ushort IMAGE_SIZEOF_SHORT_NAME = 8;
 	}
 
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]

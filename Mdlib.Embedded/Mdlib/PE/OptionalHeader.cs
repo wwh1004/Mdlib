@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using static Mdlib.PE.NativeConstants;
 
 namespace Mdlib.PE {
 	/// <summary>
@@ -50,10 +51,10 @@ namespace Mdlib.PE {
 			if (!Utils.IsValidPointer(p, Math.Max(ntHeader.FileHeader.RawValue->SizeOfOptionalHeader, (ushort)2)))
 				return null;
 			switch (*(ushort*)p) {
-			case 0x010B:
+			case IMAGE_NT_OPTIONAL_HDR32_MAGIC:
 				is64Bit = false;
 				break;
-			case 0x020B:
+			case IMAGE_NT_OPTIONAL_HDR64_MAGIC:
 				is64Bit = true;
 				break;
 			default:
