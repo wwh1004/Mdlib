@@ -1,7 +1,6 @@
 using System;
-using Mdlib.PE;
 
-namespace Mdlib.Mdlib.PE {
+namespace Mdlib.PE {
 	/// <summary>
 	/// 扩展类
 	/// </summary>
