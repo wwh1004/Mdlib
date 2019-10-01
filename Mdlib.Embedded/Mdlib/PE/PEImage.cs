@@ -214,8 +214,8 @@ namespace Mdlib.PE {
 			switch (_layout) {
 			case ImageLayout.File:
 				foreach (SectionHeader sectionHeader in _sectionHeaders)
-					if (fileOffset >= sectionHeader.RawAddress && fileOffset < sectionHeader.RawAddress + sectionHeader.RawSize)
-						return fileOffset - sectionHeader.RawAddress + sectionHeader.VirtualAddress;
+					if ((uint)fileOffset >= sectionHeader.RawValue->VirtualAddress && (uint)fileOffset < sectionHeader.RawValue->VirtualAddress + sectionHeader.RawValue->SizeOfRawData)
+						return (RVA)fileOffset - sectionHeader.RawValue->VirtualAddress + sectionHeader.RawValue->VirtualAddress;
 				return (RVA)fileOffset;
 			case ImageLayout.Memory:
 				return (RVA)fileOffset;
@@ -228,8 +228,8 @@ namespace Mdlib.PE {
 			switch (_layout) {
 			case ImageLayout.File:
 				foreach (SectionHeader sectionHeader in _sectionHeaders)
-					if (rva >= sectionHeader.VirtualAddress && rva < sectionHeader.VirtualAddress + Math.Max(sectionHeader.VirtualSize, sectionHeader.RawSize))
-						return rva - sectionHeader.VirtualAddress + sectionHeader.RawAddress;
+					if ((uint)rva >= sectionHeader.RawValue->VirtualAddress && (uint)rva < sectionHeader.RawValue->VirtualAddress + Math.Max(sectionHeader.RawValue->VirtualSize, sectionHeader.RawValue->SizeOfRawData))
+						return (FileOffset)rva - sectionHeader.RawValue->VirtualAddress + sectionHeader.RawValue->VirtualAddress;
 				return (FileOffset)rva;
 			case ImageLayout.Memory:
 				return (FileOffset)rva;

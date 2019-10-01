@@ -66,13 +66,13 @@ namespace Mdlib.Test {
 		}
 #pragma warning restore IDE0059
 
-		private static void PrintSectionHeader(SectionHeader value, int indent) {
+		private static unsafe void PrintSectionHeader(SectionHeader value, int indent) {
 			PrintRawData(value, indent);
 			Print($"Name: {value.DisplayName}", indent);
-			Print($"VirtualAddress: {(uint)value.VirtualAddress:X8}", indent);
-			Print($"VirtualSize: {value.VirtualSize:X8}", indent);
-			Print($"RawAddress: {(uint)value.RawAddress:X8}", indent);
-			Print($"RawSize: {value.RawSize:X8}", indent);
+			Print($"VirtualAddress: {value.RawValue->VirtualAddress:X8}", indent);
+			Print($"VirtualSize: {value.RawValue->VirtualSize:X8}", indent);
+			Print($"RawAddress: {value.RawValue->VirtualAddress:X8}", indent);
+			Print($"RawSize: {value.RawValue->SizeOfRawData:X8}", indent);
 		}
 
 		private static void PrintStreamHeader(StreamHeader value, int indent) {

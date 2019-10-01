@@ -29,39 +29,6 @@ namespace Mdlib.PE {
 		public uint Length => IMAGE_SECTION_HEADER.UnmanagedSize;
 
 		/// <summary />
-		public byte* Name => RawValue->Name;
-
-		/// <summary />
-		public uint VirtualSize {
-			get => RawValue->VirtualSize;
-			set => RawValue->VirtualSize = value;
-		}
-
-		/// <summary />
-		public RVA VirtualAddress {
-			get => (RVA)RawValue->VirtualAddress;
-			set => RawValue->VirtualAddress = (uint)value;
-		}
-
-		/// <summary />
-		public uint RawSize {
-			get => RawValue->SizeOfRawData;
-			set => RawValue->SizeOfRawData = value;
-		}
-
-		/// <summary />
-		public FileOffset RawAddress {
-			get => (FileOffset)RawValue->PointerToRawData;
-			set => RawValue->PointerToRawData = (uint)value;
-		}
-
-		/// <summary />
-		public uint Characteristics {
-			get => RawValue->Characteristics;
-			set => RawValue->Characteristics = value;
-		}
-
-		/// <summary />
 		public string DisplayName {
 			get {
 				if (_displayName is null)
