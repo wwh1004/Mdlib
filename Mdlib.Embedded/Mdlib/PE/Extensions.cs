@@ -16,14 +16,14 @@ namespace Mdlib.PE {
 			if (peImage is null)
 				throw new ArgumentNullException(nameof(peImage));
 
-			return Utils.AlignUp(value, !peImage.Is64Bit ? peImage.NtHeader.OptionalHeader.RawValue32->SectionAlignment : peImage.NtHeader.OptionalHeader.RawValue64->SectionAlignment);
+			return MdlibUtils.AlignUp(value, !peImage.Is64Bit ? peImage.NtHeader.OptionalHeader.RawValue32->SectionAlignment : peImage.NtHeader.OptionalHeader.RawValue64->SectionAlignment);
 		}
 
 		public static uint AlignUpByFile(this IPEImage peImage, uint value) {
 			if (peImage is null)
 				throw new ArgumentNullException(nameof(peImage));
 
-			return Utils.AlignUp(value, !peImage.Is64Bit ? peImage.NtHeader.OptionalHeader.RawValue32->FileAlignment : peImage.NtHeader.OptionalHeader.RawValue64->FileAlignment);
+			return MdlibUtils.AlignUp(value, !peImage.Is64Bit ? peImage.NtHeader.OptionalHeader.RawValue32->FileAlignment : peImage.NtHeader.OptionalHeader.RawValue64->FileAlignment);
 		}
 	}
 }

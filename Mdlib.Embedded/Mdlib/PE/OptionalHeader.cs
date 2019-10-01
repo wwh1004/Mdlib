@@ -273,7 +273,7 @@ namespace Mdlib.PE {
 			OptionalHeader optionalHeader;
 
 			p = (byte*)ntHeader.RawData + 4 + IMAGE_FILE_HEADER.UnmanagedSize;
-			if (!Utils.IsValidPointer(p, Math.Max(ntHeader.FileHeader.RawValue->SizeOfOptionalHeader, (ushort)2)))
+			if (!MdlibUtils.IsValidPointer(p, Math.Max(ntHeader.FileHeader.RawValue->SizeOfOptionalHeader, (ushort)2)))
 				return null;
 			switch (*(ushort*)p) {
 			case IMAGE_NT_OPTIONAL_HDR32_MAGIC:
@@ -285,7 +285,7 @@ namespace Mdlib.PE {
 			default:
 				return null;
 			}
-			if (!Utils.IsValidPointer(p, !is64Bit ? IMAGE_OPTIONAL_HEADER32.UnmanagedSize : IMAGE_OPTIONAL_HEADER32.UnmanagedSize))
+			if (!MdlibUtils.IsValidPointer(p, !is64Bit ? IMAGE_OPTIONAL_HEADER32.UnmanagedSize : IMAGE_OPTIONAL_HEADER32.UnmanagedSize))
 				return null;
 			optionalHeader = new OptionalHeader {
 				_rawData = p,

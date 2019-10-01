@@ -47,6 +47,7 @@
     <Compile Include="Mdlib\DotNet\Metadata\StorageSignature.cs" />
     <Compile Include="Mdlib\DotNet\Metadata\StreamHeader.cs" />
     <Compile Include="Mdlib\EmbeddedAssemblyInfo.cs" />
+    <Compile Include="Mdlib\MdlibUtils.cs" />
     <Compile Include="Mdlib\PE\Address.cs" />
     <Compile Include="Mdlib\PE\Characteristics.cs" />
     <Compile Include="Mdlib\PE\DataDirectory.cs" />
@@ -62,7 +63,6 @@
     <Compile Include="Mdlib\PE\PEImage.cs" />
     <Compile Include="Mdlib\PE\SectionHeader.cs" />
     <Compile Include="Mdlib\PE\Subsystem.cs" />
-    <Compile Include="Mdlib\Utils.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>

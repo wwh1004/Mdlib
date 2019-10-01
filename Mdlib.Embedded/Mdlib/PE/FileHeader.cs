@@ -36,7 +36,7 @@ namespace Mdlib.PE {
 			FileHeader fileHeader;
 
 			p = (byte*)ntHeader.RawData + 4;
-			if (!Utils.IsValidPointer(p, IMAGE_FILE_HEADER.UnmanagedSize))
+			if (!MdlibUtils.IsValidPointer(p, IMAGE_FILE_HEADER.UnmanagedSize))
 				return null;
 			fileHeader = new FileHeader {
 				_rawData = p,

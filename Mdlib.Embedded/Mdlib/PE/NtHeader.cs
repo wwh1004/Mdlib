@@ -53,7 +53,7 @@ namespace Mdlib.PE {
 			NtHeader ntHeader;
 
 			p = (byte*)peImage.RawData + peImage.DosHeader.RawValue->e_lfanew;
-			if (!Utils.IsValidPointer(p, 4))
+			if (!MdlibUtils.IsValidPointer(p, 4))
 				return null;
 			ntHeader = new NtHeader {
 				_rawData = p,

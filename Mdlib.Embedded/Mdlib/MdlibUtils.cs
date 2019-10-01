@@ -2,7 +2,7 @@ using System;
 using System.Runtime.ExceptionServices;
 
 namespace Mdlib {
-	internal static unsafe class Utils {
+	internal static unsafe class MdlibUtils {
 		[HandleProcessCorruptedStateExceptions]
 		public static bool IsValidPointer(void* p, uint size) {
 			if (p is null)

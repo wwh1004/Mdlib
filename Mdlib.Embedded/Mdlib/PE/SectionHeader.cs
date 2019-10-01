@@ -83,7 +83,7 @@ namespace Mdlib.PE {
 
 			fileHeader = peImage.NtHeader.FileHeader;
 			offset = (uint)fileHeader.FileOffset + IMAGE_FILE_HEADER.UnmanagedSize + fileHeader.RawValue->SizeOfOptionalHeader + (index * IMAGE_SECTION_HEADER.UnmanagedSize);
-			if (!Utils.IsValidPointer((byte*)peImage.RawData + offset, IMAGE_SECTION_HEADER.UnmanagedSize))
+			if (!MdlibUtils.IsValidPointer((byte*)peImage.RawData + offset, IMAGE_SECTION_HEADER.UnmanagedSize))
 				return null;
 			sectionHeader = new SectionHeader {
 				_offset = offset,
