@@ -23,7 +23,7 @@ namespace Mdlib.PE {
 	/// <summary>
 	/// PE映像接口
 	/// </summary>
-	internal interface IPEImage {
+	internal unsafe interface IPEImage {
 		/// <summary>
 		/// 当前PE映像的原始数据
 		/// </summary>
@@ -90,38 +90,72 @@ namespace Mdlib.PE {
 		FileOffset ToFileOffset(RVA rva);
 
 		/// <summary>
-		/// 复制数据
+		/// 读取数据
 		/// </summary>
 		/// <param name="rva"></param>
 		/// <param name="length"></param>
 		/// <returns></returns>
-		byte[] Copy(RVA rva, uint length);
+		byte[] Read(RVA rva, uint length);
 
 		/// <summary>
-		/// 复制数据
+		/// 读取数据
 		/// </summary>
 		/// <param name="fileOffset"></param>
 		/// <param name="length"></param>
 		/// <returns></returns>
-		byte[] Copy(FileOffset fileOffset, uint length);
+		byte[] Read(FileOffset fileOffset, uint length);
 
 		/// <summary>
-		/// 复制数据
+		/// 读取数据
 		/// </summary>
 		/// <param name="rva"></param>
 		/// <param name="destination"></param>
 		/// <param name="index"></param>
 		/// <param name="length"></param>
-		void CopyTo(RVA rva, byte[] destination, int index, uint length);
+		void Read(RVA rva, byte[] destination, int index, uint length);
 
 		/// <summary>
-		/// 复制数据
+		/// 读取数据
 		/// </summary>
 		/// <param name="fileOffset"></param>
 		/// <param name="destination"></param>
 		/// <param name="index"></param>
 		/// <param name="length"></param>
-		void CopyTo(FileOffset fileOffset, byte[] destination, int index, uint length);
+		void Read(FileOffset fileOffset, byte[] destination, int index, uint length);
+
+		/// <summary>
+		/// 读取数据
+		/// </summary>
+		/// <param name="fileOffset"></param>
+		/// <param name="pDestination"></param>
+		/// <param name="length"></param>
+		void Read(FileOffset fileOffset, void* pDestination, uint length);
+
+		/// <summary>
+		/// 写入数据
+		/// </summary>
+		/// <param name="rva"></param>
+		/// <param name="source"></param>
+		/// <param name="index"></param>
+		/// <param name="length"></param>
+		void Write(RVA rva, byte[] source, int index, uint length);
+
+		/// <summary>
+		/// 写入数据
+		/// </summary>
+		/// <param name="fileOffset"></param>
+		/// <param name="source"></param>
+		/// <param name="index"></param>
+		/// <param name="length"></param>
+		void Write(FileOffset fileOffset, byte[] source, int index, uint length);
+
+		/// <summary>
+		/// 写入数据
+		/// </summary>
+		/// <param name="fileOffset"></param>
+		/// <param name="pSource"></param>
+		/// <param name="length"></param>
+		void Write(FileOffset fileOffset, void* pSource, uint length);
 
 		/// <summary>
 		/// 重新加载
@@ -267,34 +301,64 @@ namespace Mdlib.PE {
 			_isDotNet = _ntHeader.OptionalHeader.DataDirectories[IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR].Address != 0;
 		}
 
-		public byte[] Copy(RVA rva, uint length) {
+		public byte[] Read(RVA rva, uint length) {
 			byte[] buffer;
 
 			buffer = new byte[length];
-			CopyTo(rva, buffer, 0, length);
+			Read(rva, buffer, 0, length);
 			return buffer;
 		}
 
-		public byte[] Copy(FileOffset fileOffset, uint length) {
+		public byte[] Read(FileOffset fileOffset, uint length) {
 			byte[] buffer;
 
 			buffer = new byte[length];
-			CopyTo(fileOffset, buffer, 0, length);
+			Read(fileOffset, buffer, 0, length);
 			return buffer;
 		}
 
-		public void CopyTo(RVA rva, byte[] destination, int index, uint length) {
+		public void Read(RVA rva, byte[] destination, int index, uint length) {
 			if (destination is null)
 				throw new ArgumentNullException(nameof(destination));
 
-			CopyTo(ToFileOffset(rva), destination, index, length);
+			Read(ToFileOffset(rva), destination, index, length);
 		}
 
-		public void CopyTo(FileOffset fileOffset, byte[] destination, int index, uint length) {
+		public void Read(FileOffset fileOffset, byte[] destination, int index, uint length) {
 			if (destination is null)
 				throw new ArgumentNullException(nameof(destination));
 
 			Marshal.Copy((IntPtr)_rawData, destination, index, (int)length);
+		}
+
+		public void Read(FileOffset fileOffset, void* pDestination, uint length) {
+			if (pDestination is null)
+				throw new ArgumentNullException(nameof(pDestination));
+
+			for (uint i = 0; i < length; i++)
+				*((byte*)pDestination + i) = *((byte*)_rawData + i);
+		}
+
+		public void Write(RVA rva, byte[] source, int index, uint length) {
+			if (source is null)
+				throw new ArgumentNullException(nameof(source));
+
+			Write(ToFileOffset(rva), source, index, length);
+		}
+
+		public void Write(FileOffset fileOffset, byte[] source, int index, uint length) {
+			if (source is null)
+				throw new ArgumentNullException(nameof(source));
+
+			Marshal.Copy(source, index, (IntPtr)_rawData, (int)length);
+		}
+
+		public void Write(FileOffset fileOffset, void* pSource, uint length) {
+			if (pSource is null)
+				throw new ArgumentNullException(nameof(pSource));
+
+			for (uint i = 0; i < length; i++)
+				*((byte*)_rawData + i) = *((byte*)pSource + i);
 		}
 	}
 }
